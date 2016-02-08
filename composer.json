@@ -1,0 +1,18 @@
+{
+	"name": "epigra/tckimlik",
+	"description": "TC Kimlik Numarası Kontrolü ve Doğrulaması",
+	"keywords": ["tc kimlik","tckn","tc","doğrulama","validation"],
+	"homepage": "https://github.com/epigra/tckimlik",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Uğur Aydoğdu",
+			"email": "ugur.aydogdu@epigra.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Epigra\\": "src/"
+		}
+	}
+}
