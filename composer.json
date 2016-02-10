@@ -1,7 +1,7 @@
 {
 	"name": "epigra/tckimlik",
 	"description": "TC Kimlik Numarası Kontrolü ve Doğrulaması",
-	"keywords": ["tc kimlik","tckn","tc","doğrulama","validation"],
+	"keywords": ["tc kimlik","tckn","tc","kimlik", "doğrulama","laravel","form","validation"],
 	"homepage": "https://github.com/epigra/tckimlik",
 	"license": "MIT",
 	"authors": [
