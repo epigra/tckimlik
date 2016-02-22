@@ -1,5 +1,11 @@
 # TC Kimlik Numarası Kontrolü ve Doğrulaması (Validation of Turkish Identification Number) 
 
+## Yükleme
+composer üzerinden:
+```
+composer require epigra/tckimlik
+````
+demeniz yeterli olacaktır.
 
 ## Kullanım
 
