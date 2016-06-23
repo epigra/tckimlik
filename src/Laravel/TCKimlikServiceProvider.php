@@ -1,10 +1,10 @@
 <?php
-namespace Epigra\TCKimlik\Laravel;
+namespace Epigra\TcKimlik\Laravel;
 
-use Epigra\TCKimlik\TCKimlik;
+use Epigra\TcKimlik\TcKimlik;
 use \Illuminate\Support\ServiceProvider;
 
-class TCKimlikServiceProvider extends ServiceProvider
+class TcKimlikServiceProvider extends ServiceProvider
 {
 
     /**
@@ -12,7 +12,7 @@ class TCKimlikServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = false;
+    protected $defer = true;
 
 
     /**
@@ -23,15 +23,29 @@ class TCKimlikServiceProvider extends ServiceProvider
     public function boot()
     {
 
+        $container = \Illuminate\Container\Container::getInstance();
 
-        // $this->app['validator']->extend('tckimlik', function($attribute, $value, $parameters, $validator) {
-        //     return TCKimlik::verify($value);
-        // });
+        $langs = realpath(__DIR__.'/resources/lang');
 
-        // $this->app['validator']->replacer('tckimlik', function($message, $attribute, $rule, $parameters) {
-        //     if($message=="validation.tckimlik") return "Belirtilen T.C. Kimlik Numarası doğrulanamadı.";
-        //     return $message;
-        // });
+        //set the package namespace into translator
+        $container['translator']->addNamespace('tckimlik', $langs);
+
+        $this->publishes([
+            $langs => resource_path('lang/vendor/tckimlik'),
+        ]);
+
+        //extending the validator
+        $container['validator']->extend('tckimlik', function($attribute, $value, $parameters, $validator) {
+            return TCKimlik::verify($value);
+        });
+        //replacing the message
+        $container['validator']->replacer('tckimlik', function($message, $attribute, $rule, $parameters) {
+
+            if($message === "validation.tckimlik") {
+                return trans('tckimlik::tckimlik-validation.message');
+            }
+            return "Geçerli TC Kimlik numarası değil"; // default unless file is n found, {not a valid tc identity number}
+        });
     }
 
     /**
@@ -41,7 +55,13 @@ class TCKimlikServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->alias('TCKimlik', 'Epigra\TCKimlik\TCKimlik');
+
+        $container = \Illuminate\Container\Container::getInstance();
+        $container->singleton('tckimlik', 'Epigra\TcKimlik\TcKimlik');
+
+
+        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+        $loader->alias('TcKimlik', "Epigra\TcKimlik\Laravel\Facade\TcKimlik");
     }
 
     /**
@@ -51,5 +71,4 @@ class TCKimlikServiceProvider extends ServiceProvider
     {
         return ['tckimlik'];
     }
-
 }

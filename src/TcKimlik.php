@@ -1,7 +1,7 @@
 <?php
 namespace Epigra\TcKimlik;
 
-use \Illuminate\Support\Str;
+use Illuminate\Support\Str;
 
 class TcKimlik {
 	/**
@@ -9,7 +9,11 @@ class TcKimlik {
 	 * @var array
 	 */
 	private static $validationfields = ["tcno","isim","soyisim","dogumyili" ];
-
+	/**
+	 * Verifies the Turkish Identity Number
+	 * @param  string
+	 * @return bool
+	 */
 	public static function verify($input)
 	{
 		$tcno = $input;
@@ -33,17 +37,21 @@ class TcKimlik {
 
 		return true;
 	}
-
-	public static function validate(Array $data)
+	/**
+	 * Validates the Turkish Identity Number over HTTP connection to goverment sys
+	 * @param  array ['tcno' => string, 'isim' => string, 'soyisim' => string, 'dogumyili' => int]
+	 * @return bool
+	 */
+	public static function validate($data = [])
 	{
 
-		if(! self::verify($data)) return false;
+		if(! static::verify($data)) return false;
 
-		if (count(array_diff(self::$validationfields, array_keys($data))) != 0) {
+		if (count(array_diff(static::$validationfields, array_keys($data))) != 0) {
 			return false;
 		}
 
-		foreach(self::$validationfields as $field){
+		foreach(static::$validationfields as $field){
 			$data[$field] = Str::upper($data[$field]);
 		}
 
@@ -84,4 +92,5 @@ class TcKimlik {
 
 		return (strip_tags($response) === 'true') ? true : false;
 	}
+
 }
