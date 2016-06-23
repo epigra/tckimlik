@@ -1,7 +1,8 @@
 <?php
-namespace Epigra\TcKimlik\Laravel;
+namespace Epigra\TCKimlik\Laravel;
 
-use Illuminate\Support\ServiceProvider;
+use Epigra\TCKimlik\TCKimlik;
+use \Illuminate\Support\ServiceProvider;
 
 class TCKimlikServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,7 @@ class TCKimlikServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = true;
+    protected $defer = false;
 
 
     /**
@@ -21,14 +22,16 @@ class TCKimlikServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['validator']->extend('tckimlik', function($attribute, $value, $parameters, $validator) {
-            return TcKimlik::verify($value);
-        });
 
-        $this->app['validator']->replacer('tckimlik', function($message, $attribute, $rule, $parameters) {
-            if($message=="validation.tckimlik") return "Belirtilen T.C. Kimlik Numarası doğrulanamadı.";
-            return $message;
-        });
+
+        // $this->app['validator']->extend('tckimlik', function($attribute, $value, $parameters, $validator) {
+        //     return TCKimlik::verify($value);
+        // });
+
+        // $this->app['validator']->replacer('tckimlik', function($message, $attribute, $rule, $parameters) {
+        //     if($message=="validation.tckimlik") return "Belirtilen T.C. Kimlik Numarası doğrulanamadı.";
+        //     return $message;
+        // });
     }
 
     /**
@@ -38,7 +41,15 @@ class TCKimlikServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->alias('TCKimlik', 'Epigra\TCKimlik\TCKimlik');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function provides()
+    {
+        return ['tckimlik'];
     }
 
 }
