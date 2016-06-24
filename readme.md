@@ -1,4 +1,5 @@
-# TC Kimlik Numarası Kontrolü ve Doğrulaması (Validation of Turkish Identification Number) 
+# TC Kimlik Numarası Kontrolü ve Doğrulaması
+#(Verification & Validation of Turkish Identification Number)
 
 ## Yükleme
 composer üzerinden:
@@ -12,20 +13,20 @@ demeniz yeterli olacaktır.
 #### Doğrulama (Verification)
 
 ```php
-use Epigra\TcKimlik;
+use Epigra\TcKimlik\TcKimlik;
 
 $check = TcKimlik::verify('tckimlikno'); //string
-var_dump($check);
+var_dump($check); //bool
 
-$data['tcno'] = 'tckimlikno'; 
+$data['tcno'] = 'tckimlikno';
 $check2 = TcKimlik::verify($data); //array
-var_dump($check2);
+var_dump($check2); //bool
 ```
 
 #### SOAP Onay (Validation)
 
 ```php
-use Epigra\TcKimlik;
+use Epigra\TcKimlik\TcKimlik;
 
 $data = array(
 		'tcno'          => 'tckimlikno',
@@ -34,11 +35,9 @@ $data = array(
 		'dogumyili'     => 'XXXX',
 );
 
-$check = TcKimlik::validate($data); //auto uppercase
+$check = TcKimlik::validate($data); //auto uppercase forced
 var_dump($check);
 
-$check2 = TcKimlik::validate($data,false); // auto uppercase false
-var_dump($check2);
 ```
 
 #### Laravel Service Provider
@@ -46,46 +45,41 @@ var_dump($check2);
 `config/app.php` dosyası içerisindeki providers arrayi altına
 
 ```
-Epigra\TCKimlikServiceProvider::class
+Epigra\TcKimlik\Laravel\TcKimlikServiceProvider::class
 ```
 
-satırını ekledikten sonra standart Validation kütüphanesi içerisinde
+satırını ekledikten sonra
 
 ```php
-$validator = Validator::make($data, [
-	'tcno' 	 => 'required|tckimlik|unique:tabloadi,sutunadi',
-	'isim' => 'required',
-	'soyisim' 	 => 'required',
-	'dogumyili' => 'required',
-]);
+php artisan vendor:publish
 ```
-şeklinde kullanıldıktan sonra verify fonksiyonu otomatik olarak belirtilen alan için çalışarak algoritmik doğrulamayı gerçekleştirecektir.
 
-Verilen hata mesajını değiştirmek isterseniz `resources/lang/dil/validation.php`dosyası içerisine
+demenizle birlikte dil dosyası `resources/lang/vendor/tckimlik/en|tr/tckimlik-validation.php`dizinine yayınlanacaktır. Buradan dilediğiniz hata mesajını yazabilirsiniz.
+
+Dilerseniz Facade kullanabilir
 
 ```php
-'tckimlik' => "Vermek istediğiniz hata mesajı"
+use TcKimlik;
 ```
-
-şeklinde tanımlama yapabilirsiniz.
-
-
-#### Extending Laravel Validator
-
-Öncesinde `Validator::make` ile tanımlamış olduğunuz validator nesnesini `if ($validator->fails()) `şeklinde kontrol etmeden önce aşağıdaki şekilde tanımlama yapmanız yeterli olacaktır.
+veya PSR-4 Namespacing kuralları dahilinde
 
 ```php
-$validator->after(function($validator) use ($request) {
-
-	$data = array(
-		'tcno'          => 'tckimlikno',
-		'isim'          => 'XXXXX XXX',
-		'soyisim'       => 'XXXXXX',
-		'dogumyili'     => 'XXXX',
-	);
-
-    if (!TcKimlik::validate($data)) {
-        $validator->errors()->add('formfieldname', 'TC Kimlik Numarası vermiş olduğunuz kimlik bilgilerinizle eşleşmiyor');
-    }
-});
+use Epigra\TcKimlik\TcKimlik
 ```
+şeklinde sınıfın kendisine de erişebilirsiniz.
+
+Routes veya Controller içerisinde
+
+```php
+
+$rules = ['form-alan-adi' => 'required|tckimlik'];
+
+$validator  = Validator::make(Request::all(), $rules);
+
+if($validator->fails()) {
+	var_dump($validator->errors());
+} else {
+	var_dump(Request::get('alan-adi'));
+}
+```
+şeklinde kullanarak TC Kimliğini kontrol etmiş hem de HTTP üzerinden sağlamasını yapmış olursunuz.
