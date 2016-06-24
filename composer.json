@@ -10,9 +10,14 @@
 			"email": "ugur.aydogdu@epigra.com"
 		}
 	],
+	"require": {
+		   "illuminate/container" : "5.2.*",
+		   "illuminate/support" : "5.2.*",
+	       "illuminate/validation" : "5.2.*"
+	},
 	"autoload": {
 		"psr-4": {
-			"Epigra\\": "src/"
+			"Epigra\\TcKimlik\\": "src/"
 		}
 	}
 }

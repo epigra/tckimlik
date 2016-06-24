@@ -1,20 +1,31 @@
-<?php 
+<?php
+namespace Epigra\TcKimlik;
 
-namespace Epigra;
+use Illuminate\Support\Str;
 
 class TcKimlik {
-
-	private static $validationfields = ["tcno","isim","soyisim","dogumyili"];
-
+	/**
+	 * const fields to be validated
+	 * @var array
+	 */
+	private static $validationfields = ["tcno","isim","soyisim","dogumyili" ];
+	/**
+	 * Verifies the Turkish Identity Number
+	 * @param  string
+	 * @return bool
+	 */
 	public static function verify($input)
 	{
 		$tcno = $input;
-		if(is_array($input) && !empty($input['tcno'])) $tcno = $input['tcno'];
+
+		if(is_array($input) && !empty($input['tcno'])) {
+			$tcno = $input['tcno'];
+		}
 
 		if(!preg_match('/^[1-9]{1}[0-9]{9}[0,2,4,6,8]{1}$/', $tcno)){
 			return false;
 		}
-		
+
 		$odd = $tcno[0] + $tcno[2] + $tcno[4] + $tcno[6] + $tcno[8];
 		$even = $tcno[1] + $tcno[3] + $tcno[5] + $tcno[7];
 		$digit10 = ($odd * 7 - $even) % 10;
@@ -26,20 +37,22 @@ class TcKimlik {
 
 		return true;
 	}
-
-	public static function validate(Array $data,$auto_uppercase = TRUE)
+	/**
+	 * Validates the Turkish Identity Number over HTTP connection to goverment sys
+	 * @param  array ['tcno' => string, 'isim' => string, 'soyisim' => string, 'dogumyili' => int]
+	 * @return bool
+	 */
+	public static function validate($data = [])
 	{
 
-		if(! self::verify($data)) return false;
+		if(! static::verify($data)) return false;
 
-		if (count(array_diff(self::$validationfields, array_keys($data))) != 0) {
+		if (count(array_diff(static::$validationfields, array_keys($data))) != 0) {
 			return false;
 		}
 
-		if($auto_uppercase){
-			foreach(self::$validationfields as $field){
-				$data[$field] = self::tr_uppercase($data[$field]);
-			}
+		foreach(static::$validationfields as $field){
+			$data[$field] = Str::upper($data[$field]);
 		}
 
 		$post_data = '<?xml version="1.0" encoding="utf-8"?>
@@ -68,8 +81,8 @@ class TcKimlik {
 					'POST /Service/KPSPublic.asmx HTTP/1.1',
 					'Host: tckimlik.nvi.gov.tr',
 					'Content-Type: text/xml; charset=utf-8',
-					'SOAPAction: "http://tckimlik.nvi.gov.tr/WS/TCKimlikNoDogrula"',
-					'Content-Length: '.strlen($post_data)
+					'Content-Length: '.strlen($post_data),
+					'SOAPAction: "http://tckimlik.nvi.gov.tr/WS/TCKimlikNoDogrula"'
 			),
 		);
 		curl_setopt_array($ch, $options);
@@ -78,11 +91,6 @@ class TcKimlik {
 		curl_close($ch);
 
 		return (strip_tags($response) === 'true') ? true : false;
-	}
-
-	private static function tr_uppercase($string){
-		$string = str_replace(array('i'), array('İ'), $string);
-		return mb_convert_case($string, MB_CASE_UPPER, "UTF-8");
 	}
 
 }
