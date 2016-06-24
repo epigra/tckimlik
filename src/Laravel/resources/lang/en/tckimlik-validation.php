@@ -1,4 +1,4 @@
 <?php
 return [
-    'message' => 'not a valid Turkish Identity number from package'
+    'message' => 'not a valid Turkish Identity number'
 ];

@@ -1,4 +1,4 @@
 <?php
 return [
-    'message' => 'Geçerli TC Kimlik numarası değil, paketten'
+    'message' => 'Geçerli TC Kimlik numarası değil'
 ];
