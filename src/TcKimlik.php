@@ -13,6 +13,11 @@ class TcKimlik
             $tcno = $input['tcno'];
         }
 
+        if (is_array($tcno)) {
+            $inputKeys = array_keys($tcno);
+            $tcno = $input[$inputKeys[0]];
+        }
+
         if (!preg_match('/^[1-9]{1}[0-9]{9}[0,2,4,6,8]{1}$/', $tcno)) {
             return false;
         }
