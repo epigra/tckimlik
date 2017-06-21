@@ -14,12 +14,14 @@ class TCKimlikServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Validator::extend('tckimlik', function($attribute, $value, $parameters, $validator) {
+        Validator::extend('tckimlik', function ($attribute, $value, $parameters, $validator) {
             return TcKimlik::verify($value);
         });
 
-        Validator::replacer('tckimlik', function($message, $attribute, $rule, $parameters) {
-            if($message=="validation.tckimlik") return "Belirtilen T.C. Kimlik Numarası doğrulanamadı.";
+        Validator::replacer('tckimlik', function ($message, $attribute, $rule, $parameters) {
+            if ($message=="validation.tckimlik") {
+                return "Belirtilen T.C. Kimlik Numarası doğrulanamadı.";
+            }
             return $message;
         });
     }
