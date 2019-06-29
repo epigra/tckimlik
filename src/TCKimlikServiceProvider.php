@@ -14,6 +14,10 @@ class TCKimlikServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->bootValidator();
+    }
+
+    protected function bootValidator() {
         Validator::extend('tckimlik', function ($attribute, $value, $parameters, $validator) {
             return TcKimlik::verify($value);
         });

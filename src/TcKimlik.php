@@ -88,7 +88,7 @@ class TcKimlik
         return (strip_tags($response) === 'true') ? true : false;
     }
 
-    private static function tr_uppercase($string)
+    public static function tr_uppercase($string)
     {
         $string = str_replace(array('i'), array('İ'), $string);
 
