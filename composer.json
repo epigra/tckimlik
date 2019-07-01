@@ -8,11 +8,30 @@
 		{
 			"name": "Uğur Aydoğdu",
 			"email": "ugur.aydogdu@epigra.com"
+		},
+		{
+			"name": "Musa Kurt",
+			"email": "hackedtim61@gmail.com"
 		}
 	],
 	"autoload": {
 		"psr-4": {
 			"Epigra\\": "src/"
 		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Epigra\\Tests\\": "tests/"
+		}
+	},
+	"minimum-stability": "dev",
+	"require-dev": {
+		"orchestra/testbench": "^3.5"
+	},
+	"scripts": {
+		"test": [
+			"composer test:unit"
+		],
+		"test:unit": "phpunit --group Unit"
 	}
 }
