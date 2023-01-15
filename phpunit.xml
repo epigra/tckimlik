@@ -24,5 +24,8 @@
         <env name="BIRTH_YEAR" value="1996"/>
         <env name="FIRST_NAME" value="musa"/>
         <env name="LAST_NAME" value="kurt"/>
+        <env name="BIRTH_MONTH" value="4"/>
+        <env name="BIRTH_DAY" value="2"/>
+        <env name="FOREIGNER" value="false"/>
     </php>
 </phpunit>
