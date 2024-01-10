@@ -61,7 +61,7 @@ class VerifyTCIdentificationNumberTest extends TestCase {
 	 *@group Unit
 	 **/
 	public function test_verify_good_tc_identification_regex_match() {
-		$number = 10000000000;
+		$number = 10774881040;
 		$check = TcKimlik::verify($number);
 		
 		$this->assertTrue($check);

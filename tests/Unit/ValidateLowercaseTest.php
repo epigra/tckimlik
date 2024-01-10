@@ -85,8 +85,8 @@ class ValidateLowercaseTest extends TestCase {
 	public function test_validate_lowercase_env_definitions() {
 		$check = TcKimlik::validate([
 			'tcno' => $this->TCIdentificationNumber,
-			'isim' => TcKimlik::tr_uppercase($this->FirstName),
-			'soyisim' => TcKimlik::tr_uppercase($this->LastName),
+			'isim' => TcKimlik::trUppercase($this->FirstName),
+			'soyisim' => TcKimlik::trUppercase($this->LastName),
 			'dogumyili' => $this->BirthYear
 		], false);
 
