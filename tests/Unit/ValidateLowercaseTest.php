@@ -92,4 +92,17 @@ class ValidateLowercaseTest extends TestCase {
 
 		$this->assertTrue($check);
 	}
+    public function test_validate_lowercase_env_definitions_yabanci_kimlik() {
+		$check = TcKimlik::validate([
+			'tcno' => $this->TCIdentificationNumber,
+			'isim' => ($this->FirstName),
+			'soyisim' => ($this->LastName),
+			'dogumyili' => $this->BirthYear,
+			'dogumgunu' => $this->BirthDay,
+			'dogumayi' => $this->BirthMonth,
+			'yabanci' => $this->Foreigner,
+		], true);
+
+		$this->assertTrue($check);
+	}
 }

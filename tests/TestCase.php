@@ -8,6 +8,9 @@ class TestCase extends OrchestraTestCase {
 	protected $FirstName;
 	protected $LastName;
 	protected $BirthYear;
+	protected $BirthMonth;
+	protected $BirthDay;
+	protected $Foreigner;
 
 	protected function getPackageProviders($app)
 	{
@@ -30,14 +33,20 @@ class TestCase extends OrchestraTestCase {
 		$this->FirstName = env('FIRST_NAME');
 		$this->LastName = env('LAST_NAME');
 		$this->BirthYear = env('BIRTH_YEAR');
+		$this->BirthMonth = env('BIRTH_MONTH');
+		$this->BirthDay = env('BIRTH_DAY');
+		$this->Foreigner = env('FOREIGNER');
 	}
 
-	protected function generateResponseArray($TCIdentificationNumber, $FirstName, $LastName, $BirthYear) {
+	protected function generateResponseArray($TCIdentificationNumber, $FirstName, $LastName, $BirthYear, $BirthMonth=null, $BirthDay=null, $Foreigner=false) {
 		return [
 			'tcno' => $TCIdentificationNumber,
 			'isim' => $FirstName,
 			'soyisim' => $LastName,
-			'dogumyili' => $BirthYear
+			'dogumyili' => $BirthYear,
+			'dogumayi' => $BirthMonth,
+			'dogumgunu' => $BirthDay,
+			'yabanci' => $Foreigner,
 		];
 	}
 
