@@ -34,7 +34,6 @@ class TcKimlik
         $total = ($odd + $even + $tcno[9]) % 10;
 
         if ($digit10 != $tcno[9] ||  $total != $tcno[10]) {
-            var_dump($tcno,$odd, $even, $digit10, $total);
             return false;
         }
 
