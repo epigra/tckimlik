@@ -46,7 +46,7 @@ class TcKimlik
             return false;
         }
 
-        $response = isset($data['yabanci']) && $data['yabanci'] == true ? 
+        $response = isset($data['yabanci']) && $data['yabanci'] == true ?
             self::yabanciKimlikValidate($data, $autoUppercase) :
             self::tcKimlikValidate($data, $autoUppercase);
 
@@ -59,7 +59,7 @@ class TcKimlik
         return mb_convert_case($string, MB_CASE_UPPER, "UTF-8");
     }
 
-    
+
     private static function tcKimlikValidate(array $data, $autoUppercase = TRUE)
     {
         if (count(array_diff(self::$validationFields, array_keys($data))) != 0) {
@@ -109,9 +109,9 @@ class TcKimlik
     private static function sendSoapRequest(string $url, array $payload, string $soapAction)
     {
         $fields = array_reduce(
-            array_chunk($payload, 1, true), 
-            function ($r, $i) { 
-                return $r .'<'. key($i) .">". current($i) .'</'. key($i) .">". PHP_EOL;
+            array_chunk($payload, 1, true),
+            function ($r, $i) {
+                return $r . '<' . key($i) . ">" . current($i) . '</' . key($i) . ">" . PHP_EOL;
             },
             ""
         );
@@ -121,16 +121,16 @@ class TcKimlik
         $postData = '<?xml version="1.0" encoding="utf-8"?>
                     <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
                         <soap:Body>
-                            <'.$soapAction.' xmlns="http://tckimlik.nvi.gov.tr/WS">
-                                '.$fields.'
-                            </'.$soapAction.'>
+                            <' . $soapAction . ' xmlns="http://tckimlik.nvi.gov.tr/WS">
+                                ' . $fields . '
+                            </' . $soapAction . '>
                         </soap:Body>
                     </soap:Envelope>';
 
         // CURL options
         $options = array(
-            CURLOPT_URL                => 'https://tckimlik.nvi.gov.tr' . $url,
-            CURLOPT_POST            => true,
+            CURLOPT_URL               => 'https://tckimlik.nvi.gov.tr' . $url,
+            CURLOPT_POST              => true,
             CURLOPT_POSTFIELDS        => $postData,
             CURLOPT_RETURNTRANSFER    => true,
             CURLOPT_SSL_VERIFYPEER    => false,
